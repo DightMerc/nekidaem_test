@@ -19,3 +19,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Blog(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    title = models.CharField(max_length=200)
+    description = models.TextField(max_length=500)
+
+    def __str__(self):
+        return self.title
