@@ -15,7 +15,6 @@
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
-                    {{ checked_post }}
                     {% for post in posts %}
                         <div>
                             <h1><a href="">{{ post.blog }}</a></h1>
@@ -24,11 +23,11 @@
                             <p>{{ post.text|linebreaksbr }}</p>
                             <form action="/feed/?q={{ post.id }}" method="POST" class="post-form">{% csrf_token %}
                                     {{ form.as_p }}
-
-                                    {% if checked %}
-                                        <button type="submit" class="save btn btn-default">Отписаться</button>
+                                    
+                                    {% if user in post.seen_by.all %}
+                                        <button type="submit" class="save btn btn-default">Не глянул</button>
                                     {% else %}
-                                        <button type="submit" class="save btn btn-default">Подписаться</button>
+                                        <button type="submit" class="save btn btn-default">Глянул</button>
                                     {% endif %}
                             </form>
                         </div>

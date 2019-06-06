@@ -40,32 +40,23 @@ def wall(request):
 
     
     seen = []
-    checked = False
-
     
 
     if request.method == "POST":
         for checked_user in checked_post.seen_by.all():
             seen.append(checked_user.id)
 
-
-        if user in seen:
+        if user.id in seen:
             checked_post.seen_by.remove(request.user.id)
         else:
             checked_post.seen_by.add(request.user.id)
-            checked = True
 
-    else:
+    full_records_ids = []
+    for blog in blogs:
+        current_blog_records = posts.filter(blog__id=blog.id)
+        for record in current_blog_records:
+            full_records_ids.append(record.pk)
+    sorted_posts = Post.objects.filter(pk__in=full_records_ids).filter().order_by('-published_date')
 
-        if user in seen:
-            checked = True
-
-        full_records_ids = []
-        for blog in blogs:
-            current_blog_records = posts.filter(blog__id=blog.id)
-            for record in current_blog_records:
-                full_records_ids.append(record.pk)
-        sorted_posts = Post.objects.filter(pk__in=full_records_ids).filter().order_by('-published_date')
-
-    return render(request, 'blog/wall.html', {'posts': sorted_posts, 'checked': checked})
+    return render(request, 'blog/wall.html', {'posts': sorted_posts, 'user': user})
     
