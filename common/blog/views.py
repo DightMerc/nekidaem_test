@@ -18,7 +18,22 @@ def blog_detail(request, pk):
     if request.method == "POST":
 
         if user in follow:
+            blogs = Blog.objects.filter(followers__id=user)
+            posts = Post.objects.all()
+
+            full_records_ids = []
+
+            current_blog_records = posts.filter(blog__id=blog.id)
+            for record in current_blog_records:
+                full_records_ids.append(record.pk)
+
+            checked_posts = Post.objects.filter(pk__in=full_records_ids)
+
+            for checked_post in checked_posts:
+                checked_post.seen_by.remove(request.user.id)
+
             blog.followers.remove(request.user.id)
+            
         else:
             blog.followers.add(request.user.id)
             subscribed = True
@@ -56,7 +71,7 @@ def wall(request):
         current_blog_records = posts.filter(blog__id=blog.id)
         for record in current_blog_records:
             full_records_ids.append(record.pk)
-    sorted_posts = Post.objects.filter(pk__in=full_records_ids).filter().order_by('-published_date')
+    sorted_posts = Post.objects.filter(pk__in=full_records_ids).order_by('-published_date')
 
     return render(request, 'blog/wall.html', {'posts': sorted_posts, 'user': user})
     
