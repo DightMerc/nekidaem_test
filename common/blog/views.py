@@ -3,7 +3,28 @@ from .models import Blog, Post
 
 # Create your views here.
 def blog_list(request):
-    return render(request, 'blog/blog_list.html', {})
+    user = request.user
+    blogs = Blog.objects.all()
+    posts = Post.objects.all()
+    try:
+        choosen_blog = get_object_or_404(Blog, id=request.GET.get('q',''))
+    except:
+        pass
+
+    
+    subscribed = []
+    
+
+    if request.method == "POST":
+        for checked_user in choosen_blog.followers.all():
+            subscribed.append(checked_user.id)
+
+        if user.id in subscribed:
+            choosen_blog.followers.remove(request.user.id)
+        else:
+            choosen_blog.followers.add(request.user.id)
+
+    return render(request, 'blog/blog_list.html', {'blogs': blogs, 'user': user})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
