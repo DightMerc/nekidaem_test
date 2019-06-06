@@ -130,8 +130,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 # Port for sending e-mail.
 
 # Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = 'dightmerc@gmail.com'
-EMAIL_HOST_PASSWORD = 'aurelialove28735427desirepotf9340312r'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 
 EMAIL_PORT = 587
