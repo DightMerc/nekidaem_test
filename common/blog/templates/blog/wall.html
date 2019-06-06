@@ -17,7 +17,7 @@
                 <div class="col-md-8">
                     {% for post in posts %}
                         <div>
-                            <h1><a href="">{{ post.blog }}</a></h1>
+                            <h1><a href="/blog/{{post.blog.id}}/">{{ post.blog }}</a></h1>
                             <p>published: {{ post.published_date }}</p>
                             <p><a href="">{{ post.title }}</a></p>
                             <p>{{ post.text|linebreaksbr }}</p>
