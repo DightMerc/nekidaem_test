@@ -28,10 +28,7 @@ class Post(models.Model):
 
     blog = models.ForeignKey(Blog, default="", on_delete=models.CASCADE)
 
-
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
+    seen_by = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="Глянули")    
 
     def __str__(self):
         return self.title

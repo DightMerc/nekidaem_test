@@ -1,7 +1,7 @@
 {% load static %}
 <html>
     <head>
-        <title>Django Girls blog</title>
+        <title>The Wall</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -9,17 +9,30 @@
     </head>
     <body>
         <div class="page-header">
-            <h1><a href="/">Django Girls Blog</a></h1>
+            <h1><a href="/">The Wall</a></h1>
         </div>
 
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
-                    <div class="blog">
-                        <h1><a href="">{{ blog }}</a></h1>
-                        <p>{{ blog }}</p>
-                    </div>
-                    
+                    {{ checked_post }}
+                    {% for post in posts %}
+                        <div>
+                            <h1><a href="">{{ post.blog }}</a></h1>
+                            <p>published: {{ post.published_date }}</p>
+                            <p><a href="">{{ post.title }}</a></p>
+                            <p>{{ post.text|linebreaksbr }}</p>
+                            <form action="/feed/?q={{ post.id }}" method="POST" class="post-form">{% csrf_token %}
+                                    {{ form.as_p }}
+
+                                    {% if checked %}
+                                        <button type="submit" class="save btn btn-default">Отписаться</button>
+                                    {% else %}
+                                        <button type="submit" class="save btn btn-default">Подписаться</button>
+                                    {% endif %}
+                            </form>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -33,12 +33,39 @@ def wall(request):
     user = request.user
     blogs = Blog.objects.filter(followers__id=user.id)
     posts = Post.objects.all()
+    try:
+        checked_post = get_object_or_404(Post, id=request.GET.get('q',''))
+    except:
+        pass
 
-    full_records = []
-    for blog in blogs:
-        current_blog_records = posts.filter(blog__id=blog.id)
-        for record in current_blog_records:
-            full_records.append(record)
+    
+    seen = []
+    checked = False
 
-    return render(request, 'blog/wall.html', {'blog': full_records})
+    
+
+    if request.method == "POST":
+        for checked_user in checked_post.seen_by.all():
+            seen.append(checked_user.id)
+
+
+        if user in seen:
+            checked_post.seen_by.remove(request.user.id)
+        else:
+            checked_post.seen_by.add(request.user.id)
+            checked = True
+
+    else:
+
+        if user in seen:
+            checked = True
+
+        full_records_ids = []
+        for blog in blogs:
+            current_blog_records = posts.filter(blog__id=blog.id)
+            for record in current_blog_records:
+                full_records_ids.append(record.pk)
+        sorted_posts = Post.objects.filter(pk__in=full_records_ids).filter().order_by('-published_date')
+
+    return render(request, 'blog/wall.html', {'posts': sorted_posts, 'checked': checked})
     
