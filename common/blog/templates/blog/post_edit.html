@@ -13,20 +13,17 @@
             <h1><a href="/blogs/">Blogs</a></h1>
             <h1><a href="/post/new/">New Post</a></h1>
 
-
         </div>
 
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
                     <div class="blog">
-                        <h1><a href="/blog/{{post.blog.id}}/">{{ post.blog }}</a></h1>
-                        <p>published: {{ post.published_date }}</p>
-                        {% if post.author == user %}
-                            <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-                        {% endif %}
-                        <p>{{ post.title }}</p>
-                        <p>{{ post.text|linebreaksbr }}</p>
+                        <h1>New post</h1>
+                        <form method="POST" class="post-form">{% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="save btn btn-default">Save</button>
+                        </form>
                     </div>
                     
                 </div>

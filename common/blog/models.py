@@ -34,6 +34,10 @@ class Post(models.Model):
 
     seen_by = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="Глянули")  
 
+    def publish(self):
+        self.published_date = timezone.now()
+        self.save()
+
     def __str__(self):
         return self.title
 
